@@ -10,39 +10,7 @@
             <v-col cols="6" md="3">
               <v-text-field
                 v-model="customer.firstName"
-                label="First Name"
-                :rules="[rules.required]"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="3">
-              <v-text-field
-                v-model="customer.area"
-                label="Area"
-                :rules="[rules.required]"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="3">
-              <v-text-field
-                v-model="customer.city"
-                label="City"
-                :rules="[rules.required]"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="3">
-              <v-text-field
-                v-model="customer.pincode"
-                label="Pincode"
-                :rules="[rules.required, rules.number]"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="3">
-              <v-text-field
-                v-model="customer.landmark"
-                label="Landmark"
+                label="Name"
                 :rules="[rules.required]"
                 required
               ></v-text-field>
@@ -76,6 +44,60 @@
                 label="Address 2"
               ></v-text-field>
             </v-col>
+            <v-col cols="12" md="3">
+              <v-text-field
+                v-model="customer.area"
+                label="Area"
+                :rules="[rules.required]"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-text-field
+                v-model="customer.city"
+                label="City"
+                :rules="[rules.required]"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-text-field
+                v-model="customer.pincode"
+                label="Pincode"
+                :rules="[rules.required, rules.number]"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-text-field
+                v-model="customer.landmark"
+                label="Tags"
+                :rules="[rules.required]"
+                required
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" md="3">
+              <v-text-field
+                v-model="customer.address1"
+                label="Comments"
+                :rules="[rules.required]"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-text-field
+                v-model="customer.address2"
+                label="PID"
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" md="3">
+              <v-text-field
+                v-model="customer.address2"
+                label="Chit"
+              ></v-text-field>
+            </v-col>
           </v-row>
         </v-form>
       </v-card-text>
@@ -103,6 +125,7 @@ export default {
         mobile2: "",
         address1: "",
         address2: "",
+        chit: "",
       },
       rules: {
         required: (value) => !!value || "Required.",

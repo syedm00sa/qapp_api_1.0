@@ -1,10 +1,10 @@
 <template>
   <header>
-    <div class="left">CHIT</div>
+    <div class="left">CUSTOMERS</div>
     <nav>
       <router-link to="/search">SEARCH</router-link>
       <router-link to="/create">CREATE</router-link>
-      <router-link to="/manage">MANAGE</router-link>
+      <!-- <router-link to="/manage">MANAGE</router-link> -->
     </nav>
     <div class="right">
       <router-link to="/"><i class="fas fa-home"></i></router-link>
