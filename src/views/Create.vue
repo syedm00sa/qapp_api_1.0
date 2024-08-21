@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-main>
     <v-card class="mx-auto my-5" max-width="800">
       <v-card-title>
         <span class="headline">Create New Customer</span>
@@ -107,7 +107,7 @@
         <v-btn color="primary" @click="createCustomer">Create</v-btn>
       </v-card-actions>
     </v-card>
-  </v-container>
+  </v-main>
 </template>
 
 <script>
@@ -150,7 +150,7 @@ export default {
 </script>
 
 <style scoped>
-.v-card {
-  padding: 20px;
-}
+/* .v-card {
+  padding: 2em;
+} */
 </style>
