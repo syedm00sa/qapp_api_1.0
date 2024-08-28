@@ -2,6 +2,7 @@
   <v-app class="app-container">
     <!-- Header with Icons in the Top Right Corner -->
     <v-app-bar app color="primary" dark>
+      <v-app-bar-title class="appBarTitle">QApp</v-app-bar-title>
       <v-spacer></v-spacer>
       <!-- Icons in the top-right corner -->
       <v-icon size="32" class="mr-4">mdi-home</v-icon>
@@ -73,5 +74,8 @@ export default {
 
 .v-main {
   background-color: #f5f5f5;
+}
+.appBarTitle {
+  font-weight: bold;
 }
 </style>
