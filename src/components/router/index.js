@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Search from "../../views/Search.vue";
+import Ser from "../../views/ser.vue";
 import Create from "../../views/Create.vue";
 import Manage from "../../views/Manage.vue";
 import LandingPage from "../../views/LandingPage.vue";

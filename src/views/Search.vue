@@ -9,6 +9,7 @@
           single-line
           hide-details
           outlined
+          @input="handleSearch"
         ></v-text-field>
       </v-card-title>
     </v-card>
@@ -21,14 +22,14 @@
       <div class="table-wrapper">
         <v-data-table
           v-model:items-per-page="itemsPerPage"
-          :fixed-header="headers"
-          :items="searchQuery ? filteredCustomers : customers"
+          :headers="headers"
+          :items="filteredCustomers"
           :items-length="totalItems"
           class="elevation-1"
           dense
         >
           <template v-slot:item.actions="{ item }">
-            <div v-if="item.chit !== 'yes'">
+            <div v-if="item.verified !== 'yes'">
               <!-- Show buttons only if chit is not 'yes' -->
               <div v-if="editedCustomer && editedCustomer.id === item.id">
                 <!-- Editable mode -->
@@ -49,69 +50,42 @@
             </div>
           </template>
 
-          <template v-slot:item.Name="{ item }">
+          <template v-slot:item.name="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
               <!-- Editable text field for Name -->
-              <v-text-field v-model="editedCustomer.Name" dense hide-details />
+              <v-text-field v-model="editedCustomer.name" dense hide-details />
             </div>
             <div v-else>
-              {{ item.Name }}
-            </div>
-          </template>
-          <template v-slot:item.mobile1="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
-              <v-text-field
-                v-model="editedCustomer.mobile1"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else>
-              {{ item.mobile1 }}
-            </div>
-          </template>
-          <template v-slot:item.mobile2="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
-              <v-text-field
-                v-model="editedCustomer.mobile2"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else>
-              {{ item.mobile2 }}
-            </div>
-          </template>
-          <template v-slot:item.address1="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
-              <v-text-field
-                v-model="editedCustomer.address1"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else>
-              {{ item.address1 }}
+              {{ item.name }}
             </div>
           </template>
 
-          <template v-slot:item.address2="{ item }">
+          <template v-slot:item.mobile_number="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
               <!-- Editable text field for mobile1 -->
               <v-text-field
-                v-model="editedCustomer.address2"
+                v-model="editedCustomer.mobile_number"
                 dense
                 hide-details
               />
             </div>
             <div v-else>
-              {{ item.address2 }}
+              {{ item.mobile_number }}
             </div>
           </template>
-
+          <template v-slot:item.address="{ item }">
+            <div v-if="editedCustomer && editedCustomer.id === item.id">
+              <!-- Editable text field for mobile1 -->
+              <v-text-field
+                v-model="editedCustomer.address"
+                dense
+                hide-details
+              />
+            </div>
+            <div v-else>
+              {{ item.address }}
+            </div>
+          </template>
           <template v-slot:item.area="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
               <!-- Editable text field for mobile1 -->
@@ -121,6 +95,70 @@
               {{ item.area }}
             </div>
           </template>
+          <template v-slot:item.status="{ item }">
+            <div v-if="editedCustomer && editedCustomer.id === item.id">
+              <v-text-field
+                v-model="editedCustomer.status"
+                dense
+                hide-details
+              />
+            </div>
+            <div v-else>
+              {{ item.status }}
+            </div>
+          </template>
+
+          <!-- <template v-slot:item.created_at="{ item }">
+            <div v-if="editedCustomer && editedCustomer.id === item.id">
+              <v-text-field
+                v-model="editedCustomer.created_at"
+                dense
+                hide-details
+              />
+            </div>
+            <div v-else>
+              {{ item.created_at }}
+            </div>
+          </template> -->
+          <!-- 
+          <template v-slot:item.created_by="{ item }">
+            <div v-if="editedCustomer && editedCustomer.id === item.id">
+              <v-text-field
+                v-model="editedCustomer.created_by"
+                dense
+                hide-details
+              />
+            </div>
+            <div v-else>
+              {{ item.created_by }}
+            </div>
+          </template> -->
+
+          <!-- <template v-slot:item.updated_at="{ item }">
+            <div v-if="editedCustomer && editedCustomer.id === item.id">
+              <v-text-field
+                v-model="editedCustomer.updated_at"
+                dense
+                hide-details
+              />
+            </div>
+            <div v-else>
+              {{ item.updated_at }}
+            </div>
+          </template> -->
+          <!-- 
+          <template v-slot:item.updated_by="{ item }">
+            <div v-if="editedCustomer && editedCustomer.id === item.id">
+              <v-text-field
+                v-model="editedCustomer.updated_by"
+                dense
+                hide-details
+              />
+            </div>
+            <div v-else>
+              {{ item.updated_by }}
+            </div>
+          </template> -->
 
           <template v-slot:item.city="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
@@ -134,7 +172,6 @@
 
           <template v-slot:item.pincode="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
               <v-text-field
                 v-model="editedCustomer.pincode"
                 dense
@@ -146,37 +183,59 @@
             </div>
           </template>
 
-          <template v-slot:item.tag="{ item }">
+          <!-- Display Tags Normally or Edit Mode -->
+          <template v-slot:item.tags="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
-              <v-text-field v-model="editedCustomer.tag" dense hide-details />
+              <TagComponent
+                :theTags="editedCustomer.tags"
+                @tagSelectionChanged="handleTagSelectionChanged"
+              />
             </div>
             <div v-else>
-              {{ item.tag }}
+              <v-chip
+                v-for="(tag, index) in item.tags"
+                :key="index"
+                color="yellow"
+                class="mr-2 mb-2"
+                small
+              >
+                {{ tag }}
+              </v-chip>
             </div>
           </template>
-          <template v-slot:item.comment="{ item }">
+          <template v-slot:item.comments="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
               <!-- Editable text field for mobile1 -->
               <v-text-field
-                v-model="editedCustomer.comment"
+                v-model="editedCustomer.comments"
                 dense
                 hide-details
               />
             </div>
             <div v-else>
-              {{ item.comment }}
+              {{ item.comments }}
             </div>
           </template>
-          <template v-slot:item.pid="{ item }">
+          <!-- <template v-slot:item.pid="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
               <v-text-field v-model="editedCustomer.pid" dense hide-details />
             </div>
             <div v-else>
               {{ item.pid }}
             </div>
-          </template>
+          </template> -->
+          <!-- <template v-slot:item.verified="{ item }">
+            <div v-if="editedCustomer && editedCustomer.id === item.id">
+              <v-text-field
+                v-model="editedCustomer.verified"
+                dense
+                hide-details
+              />
+            </div>
+            <div v-else>
+              {{ item.verified }}
+            </div>
+          </template> -->
         </v-data-table>
       </div>
     </v-card>
@@ -184,173 +243,225 @@
 </template>
 
 <script>
+import TagComponent from "../components/Tagcomponents.vue";
+import axios from "axios";
+
 export default {
+  components: {
+    TagComponent,
+  },
   data() {
     return {
       searchQuery: "",
       totalItems: 10,
       itemsPerPage: 5,
-      customers: [
-        {
-          id: 1,
-          Name: "Mariselvam",
-          mobile1: "987-654-3210",
-          mobile2: "876-543-2109",
-          address1: "Address 1",
-          address2: "Address 2",
-          area: "Area 1",
-          city: "City 1",
-          pincode: "12345",
-          tag: "sample tag",
-          comment: "sample comment",
-          pid: "sample pid",
-          chit: "yes",
-          actions: "",
-        },
-        {
-          id: 2,
-          Name: "Karthi",
-          mobile1: "987-654-3210",
-          mobile2: "876-543-2109",
-          address1: "Address 1",
-          address2: "Address 2",
-          area: "Area 1",
-          city: "City 1",
-          pincode: "12345",
-          tag: "sample tag",
-          comment: "sample comment",
-          pid: "sample pid",
-          chit: "no",
-          actions: "",
-        },
-        {
-          id: 3,
-          Name: "Prakash",
-          mobile1: "987-654-3210",
-          mobile2: "876-543-2109",
-          address1: "Address 1",
-          address2: "Address 2",
-          area: "Area 1",
-          city: "City 1",
-          pincode: "12345",
-          tag: "sample tag",
-          comment: "sample comment",
-          pid: "sample pid",
-          chit: "yes",
-          actions: "",
-        },
-        {
-          id: 4,
-          Name: "Mahesh",
-          mobile1: "987-654-3210",
-          mobile2: "876-543-2109",
-          address1: "Address 1",
-          address2: "Address 2",
-          area: "Area 1",
-          city: "City 1",
-          pincode: "12345",
-          tag: "sample tag",
-          comment: "sample comment",
-          pid: "sample pid",
-          chit: "yes",
-          actions: "",
-        },
-        {
-          id: 5,
-          Name: "Sathis",
-          mobile1: "987-654-3210",
-          mobile2: "876-543-2109",
-          address1: "Address 1",
-          address2: "Address 2",
-          area: "Area 1",
-          city: "City 1",
-          pincode: "12345",
-          tag: "sample tag",
-          comment: "sample comment",
-          pid: "sample pid",
-          chit: "no",
-          actions: "",
-        },
-        {
-          id: 6,
-          Name: "Kishore",
-          mobile1: "987-654-3210",
-          mobile2: "876-543-2109",
-          address1: "Address 1",
-          address2: "Address 2",
-          area: "Area 1",
-          city: "City 1",
-          pincode: "12345",
-          tag: "sample tag",
-          comment: "sample comment",
-          pid: "sample pid",
-          chit: "yes",
-          actions: "",
-        },
-        {
-          id: 7,
-          Name: "Sanjai",
-          mobile1: "987-654-3210",
-          mobile2: "876-543-2109",
-          address1: "Address 1",
-          address2: "Address 2",
-          area: "Area 1",
-          city: "City 1",
-          pincode: "12345",
-          tag: "sample tag",
-          comment: "sample comment",
-          pid: "sample pid",
-          chit: "no",
-          actions: "",
-        },
-        // Add more customers here
-      ],
-      headers: [
-        { text: "NAME", value: "Name" },
-        { text: "MOBILE 1", value: "mobile1" },
-        { text: "MOBILE 2", value: "mobile2" },
-        { text: "ADDRESS 1", value: "address1" },
-        { text: "ADDRESS 2", value: "address2" },
-        { text: "AREA", value: "area" },
-        { text: "CITY", value: "city" },
-        { text: "PINCODE", value: "pincode" },
-        { text: "TAG", value: "tag" },
-        { text: "COMMENT", value: "comment" },
-        { text: "PID", value: "pid" },
-        { text: "CHIT", value: "chit" },
-        { text: "ACTIONS", value: "actions" },
-      ],
+      customers: [],
+      filteredCustomers: [],
       editedCustomer: null,
+      loading: false,
+
+      // Custom Headers with Display Names
+      headers: [
+        { title: "Name", key: "name" },
+        { title: "Mobile", key: "mobile_number" },
+        { title: "Address", key: "address" },
+        { title: "Area", key: "area" },
+        { title: "Status", key: "status" },
+        { title: "Created Time", key: "created_at" },
+        { title: "Created By", key: "created_by" },
+        { title: "Updated Time", key: "updated_at" },
+        { title: "Updated By", key: "updated_by" },
+        { title: "City", key: "city" },
+        { title: "Postal Code", key: "pincode" },
+        { title: "Tag", key: "tags" },
+        { title: "Comment", key: "comments" },
+        { title: "PID", key: "pid" },
+        { title: "Verified", key: "verified" },
+        { title: "Actions", key: "actions" },
+      ],
     };
   },
-  computed: {
-    filteredCustomers() {
-      return this.customers.filter((customer) =>
-        customer.Name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    },
+  created() {
+    this.fetchCustomers();
   },
   methods: {
-    startEditing(item) {
-      // Clone the item to avoid modifying the original data while editing
-      this.editedCustomer = { ...item };
+    fetchCustomers() {
+      this.loading = true;
+      axios
+        .get(
+          "http://localhost:3000/api/customer/list?limit=10&offset=1&orderby=id&order=desc&status=Active"
+        )
+        .then((response) => {
+          this.customers = response.data.map((customer) => ({
+            // Transform the API response to match custom headers
+            name: customer.name,
+            mobile_number: customer.mobile_number,
+            address: customer.address,
+            area: customer.area,
+            status: customer.status,
+            created_at: customer.created_at,
+            created_by: customer.created_by,
+            updated_at: customer.updated_at,
+            updated_by: customer.updated_by,
+            city: customer.city,
+            pincode: customer.pincode,
+            tags: customer.tags,
+            comments: customer.comments,
+            pid: customer.pid,
+            verified: customer.verified,
+            id: customer.id, // Ensure 'id' is included for row identification
+          }));
+          this.filteredCustomers = this.customers;
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
-    saveCustomer(item) {
-      // Save changes by updating the original customer data
-      const index = this.customers.findIndex((c) => c.id === item.id);
-      if (index !== -1) {
-        this.customers.splice(index, 1, this.editedCustomer);
+    handleTagSelectionChanged(newTags) {
+      if (this.editedCustomer) {
+        this.editedCustomer.tags = newTags; // Update tags on edit mode
       }
-      // Exit edit mode
-      this.editedCustomer = null;
+    },
+    addTag() {
+      const trimmedTag = this.newTag.trim();
+      if (trimmedTag && !this.theTags.includes(trimmedTag)) {
+        this.$emit("tagSelectionChanged", [...this.theTags, trimmedTag]);
+        this.newTag = "";
+      }
+    },
+    removeTag(index) {
+      const updatedTags = [...this.theTags];
+      updatedTags.splice(index, 1);
+      this.$emit("tagSelectionChanged", updatedTags);
+    },
+    async deleteCustomer(item) {
+      const Customer = JSON.parse(JSON.stringify(item));
+      console.log("Customer", Customer);
+
+      console.log("item", item.id);
+
+      if (!confirm(`Are you sure you want to delete customer ${item.name}?`)) {
+        return;
+      }
+
+      try {
+        const url = `http://localhost:3000/api/customer/delete/${item.id}`;
+        const response = await axios.post(url);
+
+        // If the deletion is successful
+        if (response.status === 201) {
+          // Remove the customer from the table
+          this.customers = this.customers.filter(
+            (customer) => customer.id !== item.id
+          );
+          this.filteredCustomers = this.filteredCustomers.filter(
+            (customer) => customer.id !== item.id
+          );
+
+          alert("customerDeleted"); // If needed, emit an event to notify parent components
+          this.editedCustomer = null;
+        }
+      } catch (error) {
+        console.error("Error deleting customer:", error);
+        alert(
+          "An error occurred while deleting the customer. Please try again."
+        );
+      }
+    },
+    async handleSearch() {
+      const query = this.searchQuery.trim();
+      console.log(query, "query");
+
+      // Check if search query is empty
+      if (!query) {
+        this.filteredCustomers = this.customers; // Show all customers if query is empty
+        return;
+      }
+
+      try {
+        // Make an API call to fetch search results
+        const response = await axios.get(
+          `http://localhost:3000/api/customer/search?searchtext=${query}`
+        );
+        console.log("searchResponse", response.data.data);
+
+        // Check if the response is successful and contains data
+        if (response.status === 200 && response.data.data) {
+          this.filteredCustomers = response.data.data; // Update filteredCustomers with search results
+        } else {
+          console.error("Unexpected status code:", response.status);
+        }
+      } catch (error) {
+        console.error(
+          "Error fetching search results:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    },
+
+    startEditing(item) {
+      this.editedCustomer = JSON.parse(JSON.stringify(item)); // Clone the selected row data for editing
+    },
+    async saveCustomer() {
+      if (!this.editedCustomer) return; // Ensure there's an edited customer
+
+      try {
+        const { id } = this.editedCustomer; // Get the ID of the customer to be updated
+
+        const payload = {
+          name: this.editedCustomer.name,
+          address: this.editedCustomer.address,
+          area: this.editedCustomer.area,
+          city: this.editedCustomer.city,
+          mobile_number: this.editedCustomer.mobile_number,
+          pincode: this.editedCustomer.pincode,
+          status: this.editedCustomer.status,
+          tags: this.editedCustomer.tags,
+          comments: this.editedCustomer.comments,
+          pid: this.editedCustomer.pid,
+          verified: this.editedCustomer.verified,
+        };
+        console.log("payload", payload);
+
+        const url = `http://localhost:3000/api/customer/edit/${id}`;
+        const response = await axios.post(url, payload, {
+          headers: {
+            "Content-Type": "application/json", // Ensure the correct Content-Type
+          },
+        });
+        console.log("res", response);
+
+        // Handle the response and update the UI
+        // if (response.status === 201) {
+        //   this.fetchCustomers();
+
+        //   this.editedCustomer = null;
+        // } else {
+        //   console.log("Unexpected status code:", response.status);
+        // }
+        if (response.status === 201) {
+          // Find the index of the customer being edited and update it
+          console.log("hiiii");
+
+          const index = this.customers.findIndex(
+            (customer) => customer.id === id
+          );
+          if (index !== -1) {
+            this.customers.splice(index, 1, this.editedCustomer);
+          }
+
+          this.filteredCustomers = this.customers; // Refresh filtered data
+          this.editedCustomer = null; // Reset the editing state
+        }
+      } catch (error) {
+        console.error("Error updating customer:", error);
+      }
     },
     cancelEdit() {
-      // Cancel editing and exit edit mode
-      this.editedCustomer = null;
-    },
-    deleteCustomer(item) {
-      // Delete the customer
-      this.customers = this.customers.filter((c) => c.id !== item.id);
+      this.editedCustomer = null; // Reset the edit state
     },
   },
 };
@@ -361,34 +472,25 @@ export default {
   padding: 2em;
 }
 .v-card-title .v-col {
-  max-width: 600px; /* Adjust width as needed */
+  max-width: 600px;
   width: 100%;
 }
-
 .v-card {
   margin-bottom: 20px;
 }
 .table-wrapper {
   overflow-x: auto;
 }
-
 .v-data-table {
   white-space: nowrap;
 }
-
 .v-data-table__wrapper {
   overflow-x: auto !important;
 }
-
-.v-card {
-  width: "100%";
-}
-
 .v-card-title h2 {
   margin: 0;
   font-weight: bold;
 }
-
 .v-btn {
   margin-right: 8px;
 }

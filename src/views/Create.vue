@@ -9,7 +9,7 @@
           <v-row>
             <v-col cols="6" md="3">
               <v-text-field
-                v-model="customer.firstName"
+                v-model="customer.name"
                 label="Name"
                 :rules="[rules.required]"
                 required
@@ -17,31 +17,25 @@
             </v-col>
             <v-col cols="12" md="3">
               <v-text-field
-                v-model="customer.mobile1"
-                label="Mobile 1"
+                v-model="customer.mobile_number"
+                label="Mobile Number"
                 :rules="[rules.required, rules.number]"
                 required
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
               <v-text-field
-                v-model="customer.mobile2"
-                label="Mobile 2"
-                :rules="[rules.number]"
+                v-model="customer.verified"
+                label="Verified"
+                :rules="[rules.required]"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
               <v-text-field
-                v-model="customer.address1"
-                label="Address 1"
+                v-model="customer.address"
+                label="Address"
                 :rules="[rules.required]"
                 required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="3">
-              <v-text-field
-                v-model="customer.address2"
-                label="Address 2"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
@@ -69,34 +63,25 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
-              <v-text-field
-                v-model="customer.landmark"
+              <v-combobox
+                v-model="customer.tags"
                 label="Tags"
-                :rules="[rules.required]"
-                required
-              ></v-text-field>
+                :items="tagOptions"
+                multiple
+                chips
+                clearable
+              ></v-combobox>
             </v-col>
-
             <v-col cols="12" md="3">
               <v-text-field
-                v-model="customer.address1"
+                v-model="customer.comments"
                 label="Comments"
                 :rules="[rules.required]"
                 required
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
-              <v-text-field
-                v-model="customer.address2"
-                label="PID"
-              ></v-text-field>
-            </v-col>
-
-            <v-col cols="12" md="3">
-              <v-text-field
-                v-model="customer.address2"
-                label="Chit"
-              ></v-text-field>
+              <v-text-field v-model="customer.pid" label="PID"></v-text-field>
             </v-col>
           </v-row>
         </v-form>
@@ -111,22 +96,25 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       valid: false,
       customer: {
-        firstName: "",
+        name: "",
+        mobile_number: "",
+        verified: "",
         area: "",
         city: "",
         pincode: "",
-        landmark: "",
-        mobile1: "",
-        mobile2: "",
-        address1: "",
-        address2: "",
-        chit: "",
+        tags: [],
+        address: "",
+        comments: "",
+        pid: "",
       },
+      tagOptions: ["black", "blue", "green", "violet", "purple"], // Predefined tag options
       rules: {
         required: (value) => !!value || "Required.",
         number: (value) => !isNaN(value) || "Must be a number.",
@@ -137,12 +125,25 @@ export default {
     clearForm() {
       this.$refs.form.reset();
     },
-    createCustomer() {
+    async createCustomer() {
       if (this.$refs.form.validate()) {
-        // Logic to create customer
-        console.log("Customer created", this.customer);
-        // Clear form after creation
-        this.clearForm();
+        console.log(this.customer);
+
+        try {
+          const url = "http://localhost:3000/api/customer/create";
+          const response = await axios.post(url, this.customer);
+
+          // Handle the response
+          console.log("Customer created successfully:", response.data);
+
+          // Clear form after creation
+          this.clearForm();
+        } catch (error) {
+          console.error("Error creating customer:", error);
+          alert(
+            "An error occurred while creating the customer. Please try again."
+          );
+        }
       }
     },
   },
