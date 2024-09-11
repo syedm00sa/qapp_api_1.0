@@ -2,11 +2,11 @@
   <v-app class="app-container">
     <!-- Header with Icons in the Top Right Corner -->
     <v-app-bar app color="primary" dark>
-      <v-app-bar-title class="appBarTitle">QApp</v-app-bar-title>
+      <v-app-bar-title class="appBarTitle">Qapp</v-app-bar-title>
       <v-spacer></v-spacer>
       <!-- Icons in the top-right corner -->
       <v-icon size="32" class="mr-4">mdi-home</v-icon>
-      <v-icon size="32">mdi-account</v-icon>
+      <v-icon @click="navigateToLogin" size="32">mdi-account</v-icon>
     </v-app-bar>
 
     <v-main class="main-container">
@@ -56,6 +56,9 @@ export default {
   methods: {
     navigateToSearch() {
       this.$router.push("/search");
+    },
+    navigateToLogin() {
+      this.$router.push("/");
     },
   },
 };

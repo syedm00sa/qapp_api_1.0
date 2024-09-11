@@ -66,7 +66,6 @@
               <v-combobox
                 v-model="customer.tags"
                 label="Tags"
-                :items="tagOptions"
                 multiple
                 chips
                 clearable
@@ -92,6 +91,10 @@
         <v-btn color="primary" @click="createCustomer">Create</v-btn>
       </v-card-actions>
     </v-card>
+    <!-- Snackbar for Toast Notifications -->
+    <v-snackbar v-model="snackbar.show" :color="snackbar.color" top>
+      {{ snackbar.message }}
+    </v-snackbar>
   </v-main>
 </template>
 
@@ -114,10 +117,15 @@ export default {
         comments: "",
         pid: "",
       },
-      tagOptions: ["black", "blue", "green", "violet", "purple"], // Predefined tag options
+      // tagOptions: ["black", "blue", "green", "violet", "purple"], // Predefined tag options
       rules: {
         required: (value) => !!value || "Required.",
         number: (value) => !isNaN(value) || "Must be a number.",
+      },
+      snackbar: {
+        show: false,
+        message: "",
+        color: "success",
       },
     };
   },
@@ -133,6 +141,8 @@ export default {
           const url = "http://localhost:3000/api/customer/create";
           const response = await axios.post(url, this.customer);
 
+          // Show success message
+          this.showSnackbar("Customer created successfully", "success");
           // Handle the response
           console.log("Customer created successfully:", response.data);
 
@@ -140,11 +150,21 @@ export default {
           this.clearForm();
         } catch (error) {
           console.error("Error creating customer:", error);
+          // Show error message
+          this.showSnackbar(
+            "Unable to create customer. Please try again.",
+            "error"
+          );
           alert(
             "An error occurred while creating the customer. Please try again."
           );
         }
       }
+    },
+    showSnackbar(message, color) {
+      this.snackbar.message = message;
+      this.snackbar.color = color;
+      this.snackbar.show = true;
     },
   },
 };

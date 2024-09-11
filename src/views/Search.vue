@@ -108,58 +108,6 @@
             </div>
           </template>
 
-          <!-- <template v-slot:item.created_at="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field
-                v-model="editedCustomer.created_at"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else>
-              {{ item.created_at }}
-            </div>
-          </template> -->
-          <!-- 
-          <template v-slot:item.created_by="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field
-                v-model="editedCustomer.created_by"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else>
-              {{ item.created_by }}
-            </div>
-          </template> -->
-
-          <!-- <template v-slot:item.updated_at="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field
-                v-model="editedCustomer.updated_at"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else>
-              {{ item.updated_at }}
-            </div>
-          </template> -->
-          <!-- 
-          <template v-slot:item.updated_by="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field
-                v-model="editedCustomer.updated_by"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else>
-              {{ item.updated_by }}
-            </div>
-          </template> -->
-
           <template v-slot:item.city="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
               <!-- Editable text field for mobile1 -->
@@ -216,26 +164,6 @@
               {{ item.comments }}
             </div>
           </template>
-          <!-- <template v-slot:item.pid="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field v-model="editedCustomer.pid" dense hide-details />
-            </div>
-            <div v-else>
-              {{ item.pid }}
-            </div>
-          </template> -->
-          <!-- <template v-slot:item.verified="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field
-                v-model="editedCustomer.verified"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else>
-              {{ item.verified }}
-            </div>
-          </template> -->
         </v-data-table>
       </div>
     </v-card>
@@ -254,7 +182,7 @@ export default {
     return {
       searchQuery: "",
       totalItems: 10,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       customers: [],
       filteredCustomers: [],
       editedCustomer: null,
@@ -267,16 +195,13 @@ export default {
         { title: "Address", key: "address" },
         { title: "Area", key: "area" },
         { title: "Status", key: "status" },
-        // { title: "Created Time", key: "created_at" },
-        // { title: "Created By", key: "created_by" },
-        // { title: "Updated Time", key: "updated_at" },
-        // { title: "Updated By", key: "updated_by" },
         { title: "City", key: "city" },
         { title: "Postal Code", key: "pincode" },
         { title: "Tag", key: "tags" },
         { title: "Comment", key: "comments" },
         { title: "PID", key: "pid" },
         { title: "Verified", key: "verified" },
+        { title: "Chit", key: "chit" },
         { title: "Actions", key: "actions" },
       ],
     };
@@ -309,6 +234,7 @@ export default {
             comments: customer.comments,
             pid: customer.pid,
             verified: customer.verified,
+            chit: customer.verified == "Yes" ? customer.verified : null,
             id: customer.id, // Ensure 'id' is included for row identification
           }));
           this.filteredCustomers = this.customers;

@@ -7,7 +7,7 @@
       <v-btn text :to="{ path: '/create' }" class="mx-3">CREATE</v-btn>
 
       <v-spacer></v-spacer>
-      <v-btn icon :to="{ path: '/' }">
+      <v-btn icon :to="{ path: '/landing' }">
         <v-icon>mdi-home</v-icon>
       </v-btn>
     </v-app-bar>
