@@ -22,14 +22,14 @@
       <div class="table-wrapper">
         <v-data-table
           v-model:items-per-page="itemsPerPage"
-          :headers="headers"
+          :headers="filteredHeaders"
           :items="filteredCustomers"
           :items-length="totalItems"
           class="elevation-1"
           dense
         >
           <template v-slot:item.actions="{ item }">
-            <div v-if="item.verified !== 'yes'">
+            <div v-if="item.source !== 'new'">
               <!-- Show buttons only if chit is not 'yes' -->
               <div v-if="editedCustomer && editedCustomer.id === item.id">
                 <!-- Editable mode -->
@@ -153,7 +153,6 @@
           </template>
           <template v-slot:item.comments="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
               <v-text-field
                 v-model="editedCustomer.comments"
                 dense
@@ -181,6 +180,7 @@ export default {
   data() {
     return {
       searchQuery: "",
+      isSearchResult: false,
       totalItems: 10,
       itemsPerPage: 10,
       customers: [],
@@ -190,7 +190,7 @@ export default {
 
       // Custom Headers with Display Names
       headers: [
-        { title: "Name", key: "name" },
+        { title: "Name", key: "name", visibility: "", show: "false" },
         { title: "Mobile", key: "mobile_number" },
         { title: "Address", key: "address" },
         { title: "Area", key: "area" },
@@ -198,7 +198,7 @@ export default {
         { title: "City", key: "city" },
         { title: "Postal Code", key: "pincode" },
         { title: "Tag", key: "tags" },
-        { title: "Comment", key: "comments" },
+        { title: "Comments", key: "comments" },
         { title: "PID", key: "pid" },
         { title: "Verified", key: "verified" },
         { title: "Chit", key: "chit" },
@@ -206,8 +206,21 @@ export default {
       ],
     };
   },
+
   created() {
     this.fetchCustomers();
+  },
+  computed: {
+    // Compute headers dynamically based on isSearchResult flag
+    filteredHeaders() {
+      return this.headers.filter((header) => {
+        if (header.key === "chit") {
+          // Show chit column only if search result is active
+          return this.isSearchResult;
+        }
+        return true; // Include all other columns
+      });
+    },
   },
   methods: {
     fetchCustomers() {
@@ -234,10 +247,10 @@ export default {
             comments: customer.comments,
             pid: customer.pid,
             verified: customer.verified,
-            chit: customer.verified == "Yes" ? customer.verified : null,
             id: customer.id, // Ensure 'id' is included for row identification
           }));
           this.filteredCustomers = this.customers;
+          this.isSearchResult = false; // Data from getAllCustomers, no chit column
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -303,7 +316,8 @@ export default {
 
       // Check if search query is empty
       if (!query) {
-        this.filteredCustomers = this.customers; // Show all customers if query is empty
+        this.filteredCustomers = this.fetchCustomers(); // Show all customers if query is empty
+
         return;
       }
 
@@ -317,6 +331,7 @@ export default {
         // Check if the response is successful and contains data
         if (response.status === 200 && response.data.data) {
           this.filteredCustomers = response.data.data; // Update filteredCustomers with search results
+          this.isSearchResult = true; // Data from search, chit column should be shown
         } else {
           console.error("Unexpected status code:", response.status);
         }
