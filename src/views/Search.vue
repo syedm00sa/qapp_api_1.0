@@ -48,6 +48,24 @@
                 >
               </div>
             </div>
+            <div v-else>
+              <div v-if="editedCustomer && editedCustomer.id === item.id">
+                <!-- Editable mode -->
+                <v-btn color="success" small @click="saveCustomer(item)"
+                  >Save</v-btn
+                >
+                <v-btn color="grey" small @click="cancelEdit">Cancel</v-btn>
+              </div>
+              <div v-else>
+                <!-- Default mode -->
+                <v-btn color="primary" small @click="startEditing(item)"
+                  >Edit</v-btn
+                >
+                <v-btn color="red" small @click="deleteCustomer(item)"
+                  >Delete</v-btn
+                >
+              </div>
+            </div>
           </template>
 
           <template v-slot:item.name="{ item }">
