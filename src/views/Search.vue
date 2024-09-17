@@ -230,14 +230,6 @@ export default {
     // this.handleSearch();
   },
   computed: {
-    filteredResultsWithChitDisplay() {
-      return this.filteredCustomers.map((customer) => {
-        return {
-          ...customer,
-          chitDisplay: customer.source ? "Yes" : "No", // Add chitDisplay based on source
-        };
-      });
-    },
     // Compute headers dynamically based on isSearchResult flag
     filteredHeaders() {
       return this.headers.filter((header) => {
@@ -352,7 +344,12 @@ export default {
       try {
         // Make an API call to fetch search results
         const response = await axios.get(
-          `http://localhost:3000/api/customer/search?searchtext=${query}`
+          `http://localhost:3000/api/customer/search?searchtext=${query}`,
+          {
+            headers: {
+              "Content-Type": "application/json", // Ensure the correct Content-Type
+            },
+          }
         );
         console.log("searchResponse", response.data.data);
 
