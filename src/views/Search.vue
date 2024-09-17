@@ -29,7 +29,7 @@
           dense
         >
           <template v-slot:item.actions="{ item }">
-            <div v-if="item.source !== 'new'">
+            <div v-if="item.source === 'new'">
               <!-- Show buttons only if chit is not 'yes' -->
               <div v-if="editedCustomer && editedCustomer.id === item.id">
                 <!-- Editable mode -->
@@ -209,8 +209,17 @@ export default {
 
   created() {
     this.fetchCustomers();
+    // this.handleSearch();
   },
   computed: {
+    filteredResultsWithChitDisplay() {
+      return this.filteredCustomers.map((customer) => {
+        return {
+          ...customer,
+          chitDisplay: customer.source ? "Yes" : "No", // Add chitDisplay based on source
+        };
+      });
+    },
     // Compute headers dynamically based on isSearchResult flag
     filteredHeaders() {
       return this.headers.filter((header) => {
@@ -317,6 +326,7 @@ export default {
       // Check if search query is empty
       if (!query) {
         this.filteredCustomers = this.fetchCustomers(); // Show all customers if query is empty
+        this.editedCustomer = null;
 
         return;
       }
@@ -330,7 +340,12 @@ export default {
 
         // Check if the response is successful and contains data
         if (response.status === 200 && response.data.data) {
-          this.filteredCustomers = response.data.data; // Update filteredCustomers with search results
+          this.filteredCustomers = response.data.data.map((customer) => {
+            return {
+              ...customer,
+              chit: customer.source === "existing" ? "No" : "Yes", // Add chitDisplay based on source
+            };
+          }); // Update filteredCustomers with search results
           this.isSearchResult = true; // Data from search, chit column should be shown
         } else {
           console.error("Unexpected status code:", response.status);
@@ -385,13 +400,23 @@ export default {
         // }
         if (response.status === 201) {
           // Find the index of the customer being edited and update it
-          console.log("hiiii");
+          console.log("Save button Clicked");
+          const query = this.searchQuery.trim();
 
           const index = this.customers.findIndex(
             (customer) => customer.id === id
           );
           if (index !== -1) {
             this.customers.splice(index, 1, this.editedCustomer);
+          }
+          if (!query) {
+            this.filteredCustomers = this.fetchCustomers(); // Show all customers if query is empty
+            this.editedCustomer = null;
+
+            return;
+          } else {
+            this.filteredCustomers = this.handleSearch();
+            this.editedCustomer = null;
           }
 
           this.filteredCustomers = this.customers; // Refresh filtered data
