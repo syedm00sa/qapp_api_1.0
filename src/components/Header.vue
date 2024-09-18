@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="white" dark>
+    <v-app-bar app color="primary" dark>
       <v-toolbar-title>CUSTOMERS</v-toolbar-title>
 
       <v-btn text :to="{ path: '/search' }" class="mx-3">SEARCH</v-btn>

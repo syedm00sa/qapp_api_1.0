@@ -53,18 +53,20 @@
 
             <div v-else>
               <div v-if="editedCustomer && editedCustomer.id === item.id">
-                <v-btn color="success" small @click="saveCustomer(item)"
-                  >Save</v-btn
-                >
-                <v-btn color="grey" small @click="cancelEdit">Cancel</v-btn>
+                <v-btn color="success" small @click="saveCustomer(item)">
+                  <v-icon left>mdi-content-save</v-icon>
+                </v-btn>
+                <v-btn color="grey" small @click="cancelEdit">
+                  <v-icon left>mdi-close-circle</v-icon>
+                </v-btn>
               </div>
               <div v-else>
-                <v-btn color="primary" small @click="startEditing(item)"
-                  >Edit</v-btn
-                >
-                <v-btn color="red" small @click="deleteCustomer(item)"
-                  >Delete</v-btn
-                >
+                <v-btn color="primary" small @click="startEditing(item)">
+                  <v-icon left>mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn color="red" small @click="deleteCustomer(item)">
+                  <v-icon left>mdi-delete</v-icon>
+                </v-btn>
               </div>
             </div>
           </template>
@@ -74,7 +76,7 @@
               <!-- Editable text field for Name -->
               <v-text-field v-model="editedCustomer.name" dense hide-details />
             </div>
-            <div v-else>
+            <div v-else class="nameaddress-text">
               {{ item.name }}
             </div>
           </template>
@@ -101,7 +103,7 @@
                 hide-details
               />
             </div>
-            <div v-else>
+            <div v-else class="nameaddress-text">
               {{ item.address }}
             </div>
           </template>
@@ -114,7 +116,7 @@
               {{ item.area }}
             </div>
           </template>
-          <template v-slot:item.status="{ item }">
+          <!-- <template v-slot:item.status="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
               <v-text-field
                 v-model="editedCustomer.status"
@@ -125,7 +127,7 @@
             <div v-else>
               {{ item.status }}
             </div>
-          </template>
+          </template> -->
 
           <template v-slot:item.city="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
@@ -188,7 +190,7 @@
                 @tagSelectionChanged="handleTagSelectionChanged"
               />
             </div>
-            <div v-else>
+            <div v-else class="nameaddress-text">
               <v-chip
                 v-for="(tag, index) in item.tags"
                 :key="index"
@@ -243,9 +245,9 @@ export default {
         { title: "Mobile", key: "mobile_number" },
         { title: "Address", key: "address" },
         { title: "Area", key: "area" },
-        { title: "Status", key: "status" },
+        // { title: "Status", key: "status" },
         { title: "City", key: "city" },
-        { title: "Postal Code", key: "pincode" },
+        { title: "Pin Code", key: "pincode" },
         { title: "Tag", key: "tags" },
         { title: "Comments", key: "comments" },
         { title: "PID", key: "pid" },
@@ -480,6 +482,11 @@ export default {
 </script>
 
 <style scoped>
+.nameaddress-text {
+  word-break: break-word; /* Allows long words to break and wrap into multiple lines */
+  white-space: normal; /* Makes sure text wraps normally */
+  min-width: 130px; /* Adjust width as needed for your table */
+}
 .v-main {
   padding: 2em;
 }
