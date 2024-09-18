@@ -58,7 +58,7 @@ export default {
       this.$router.push("/search");
     },
     navigateToLogin() {
-      this.$router.push("/login");
+      this.$router.push("/");
     },
   },
 };

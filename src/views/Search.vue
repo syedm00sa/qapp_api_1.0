@@ -29,35 +29,36 @@
           dense
         >
           <template v-slot:item.actions="{ item }">
-            <div v-if="item.source === 'new'">
-              <!-- Show buttons only if chit is not 'yes' -->
-              <div v-if="editedCustomer && editedCustomer.id === item.id">
-                <!-- Editable mode -->
-                <v-btn color="success" small @click="saveCustomer(item)"
-                  >Save</v-btn
-                >
-                <v-btn color="grey" small @click="cancelEdit">Cancel</v-btn>
-              </div>
-              <div v-else>
-                <!-- Default mode -->
-                <v-btn color="primary" small @click="startEditing(item)"
-                  >Edit</v-btn
-                >
-                <v-btn color="red" small @click="deleteCustomer(item)"
-                  >Delete</v-btn
-                >
+            <div v-if="item.source">
+              <div v-if="item.source && item.source === 'new'">
+                <!-- Show buttons only if chit is not 'yes' -->
+                <div v-if="editedCustomer && editedCustomer.id === item.id">
+                  <!-- Editable mode -->
+                  <v-btn color="success" small @click="saveCustomer(item)"
+                    >save</v-btn
+                  >
+                  <v-btn color="grey" small @click="cancelEdit">Cancel</v-btn>
+                </div>
+                <div v-else>
+                  <!-- Default mode -->
+                  <v-btn color="primary" small @click="startEditing(item)"
+                    >Edit</v-btn
+                  >
+                  <v-btn color="red" small @click="deleteCustomer(item)"
+                    >Delete</v-btn
+                  >
+                </div>
               </div>
             </div>
+
             <div v-else>
               <div v-if="editedCustomer && editedCustomer.id === item.id">
-                <!-- Editable mode -->
                 <v-btn color="success" small @click="saveCustomer(item)"
                   >Save</v-btn
                 >
                 <v-btn color="grey" small @click="cancelEdit">Cancel</v-btn>
               </div>
               <div v-else>
-                <!-- Default mode -->
                 <v-btn color="primary" small @click="startEditing(item)"
                   >Edit</v-btn
                 >
@@ -146,6 +147,36 @@
             </div>
             <div v-else>
               {{ item.pincode }}
+            </div>
+          </template>
+
+          <template v-slot:item.pid="{ item }">
+            <div v-if="editedCustomer && editedCustomer.id === item.id">
+              <v-text-field v-model="editedCustomer.pid" dense hide-details />
+            </div>
+            <div v-else>
+              {{ item.pid }}
+            </div>
+          </template>
+
+          <template v-slot:item.verified="{ item }">
+            <div v-if="editedCustomer && editedCustomer.id === item.id">
+              <v-text-field
+                v-model="editedCustomer.verified"
+                dense
+                hide-details
+              />
+            </div>
+            <div v-else>
+              {{ item.verified }}
+            </div>
+          </template>
+          <template v-slot:item.chit="{ item }">
+            <div v-if="editedCustomer && editedCustomer.id === item.id">
+              <v-text-field v-model="editedCustomer.chit" dense hide-details />
+            </div>
+            <div v-else>
+              {{ item.chit }}
             </div>
           </template>
 
@@ -358,7 +389,7 @@ export default {
           this.filteredCustomers = response.data.data.map((customer) => {
             return {
               ...customer,
-              chit: customer.source === "existing" ? "No" : "Yes", // Add chitDisplay based on source
+              chit: customer.source === "existing" ? "Yes" : "No", // Add chitDisplay based on source
             };
           }); // Update filteredCustomers with search results
           this.isSearchResult = true; // Data from search, chit column should be shown
