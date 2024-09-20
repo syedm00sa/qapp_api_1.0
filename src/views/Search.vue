@@ -279,7 +279,12 @@ export default {
       this.loading = true;
       axios
         .get(
-          "http://localhost:3000/api/customer/list?limit=10&offset=1&orderby=id&order=desc&status=Active"
+          "http://localhost:3000/api/customer/list?limit=10&offset=1&orderby=id&order=desc&status=Active",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // Get the token from localStorage
+            },
+          }
         )
         .then((response) => {
           this.customers = response.data.map((customer) => ({
@@ -340,7 +345,11 @@ export default {
 
       try {
         const url = `http://localhost:3000/api/customer/delete/${item.id}`;
-        const response = await axios.post(url);
+        const response = await axios.post(url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Get the token from localStorage
+          },
+        });
 
         // If the deletion is successful
         if (response.status === 201) {
@@ -380,9 +389,14 @@ export default {
           `http://localhost:3000/api/customer/search?searchtext=${query}`,
           {
             headers: {
-              "Content-Type": "application/json", // Ensure the correct Content-Type
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // Get the token from localStorage
             },
           }
+          // {
+          //   headers: {
+          //     "Content-Type": "application/json", // Ensure the correct Content-Type
+          //   },
+          // }
         );
         console.log("searchResponse", response.data.data);
 
@@ -431,11 +445,20 @@ export default {
         console.log("payload", payload);
 
         const url = `http://localhost:3000/api/customer/edit/${id}`;
-        const response = await axios.post(url, payload, {
-          headers: {
-            "Content-Type": "application/json", // Ensure the correct Content-Type
-          },
-        });
+        const response = await axios.post(
+          url,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // Get the token from localStorage
+            },
+          }
+          // {
+          //   headers: {
+          //     "Content-Type": "application/json", // Ensure the correct Content-Type
+          //   },
+          // }
+        );
         console.log("res", response);
 
         // Handle the response and update the UI
