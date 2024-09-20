@@ -4,9 +4,39 @@
     <v-app-bar app color="primary" dark>
       <v-app-bar-title class="appBarTitle">Qapp</v-app-bar-title>
       <v-spacer></v-spacer>
-      <!-- Icons in the top-right corner -->
-      <v-icon size="32" class="mr-4">mdi-home</v-icon>
-      <v-icon @click="navigateToLogin" size="32">mdi-account</v-icon>
+      <!-- <v-row justify="center"> -->
+      <v-menu min-width="200px" rounded>
+        <template v-slot:activator="{ props }">
+          <v-btn icon v-bind="props">
+            <v-avatar color="brown" size="large">
+              <span class="text-h5">{{ user.initials }}</span>
+            </v-avatar>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-text>
+            <div class="mx-auto text-center">
+              <v-avatar color="brown">
+                <span class="text-h5">{{ user.initials }}</span>
+              </v-avatar>
+              <h3>{{ user.fullName }}</h3>
+              <p class="text-caption mt-1">
+                {{ user.email }}
+              </p>
+              <v-card width="200">
+                <v-card-title>{{ username }}</v-card-title>
+                <v-card-actions>
+                  <v-btn icon @click="logout">
+                    <v-icon color="red">mdi-logout</v-icon>
+                  </v-btn>
+                  <v-btn text @click="logout">Logout</v-btn>
+                </v-card-actions>
+              </v-card>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-menu>
+      <!-- </v-row> -->
     </v-app-bar>
 
     <v-main class="main-container">
@@ -53,7 +83,20 @@
 <script>
 export default {
   name: "LandingPage",
+  data: () => ({
+    user: {
+      initials: "JD",
+      fullName: "Selva",
+      email: "sk@gamil.com",
+    },
+  }),
+
   methods: {
+    logout() {
+      // Handle logout logic here
+      console.log("User logged out");
+      this.$router.push("/login");
+    },
     navigateToSearch() {
       this.$router.push("/search");
     },
