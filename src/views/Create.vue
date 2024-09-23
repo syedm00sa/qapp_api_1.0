@@ -141,8 +141,20 @@ export default {
           const url = "http://localhost:3000/api/customer/create";
           const response = await axios.post(url, this.customer);
 
+          if (
+            response.data.message ===
+            "Customer with same mobile number is already exist"
+          ) {
+            this.showSnackbar(
+              "Customer with same mobile number is already exist",
+              "error"
+            );
+          } else {
+            this.showSnackbar("Customer created successfully", "success");
+          }
+
           // Show success message
-          this.showSnackbar("Customer created successfully", "success");
+
           // Handle the response
           console.log("Customer created successfully:", response.data);
 
