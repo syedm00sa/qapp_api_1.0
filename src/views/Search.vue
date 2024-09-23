@@ -232,7 +232,6 @@ export default {
     return {
       searchQuery: "",
       isSearchResult: false,
-      totalItems: 10,
       itemsPerPage: 10,
       customers: [],
       filteredCustomers: [],
@@ -245,7 +244,6 @@ export default {
         { title: "Mobile", key: "mobile_number" },
         { title: "Address", key: "address" },
         { title: "Area", key: "area" },
-        // { title: "Status", key: "status" },
         { title: "City", key: "city" },
         { title: "Pin Code", key: "pincode" },
         { title: "Tag", key: "tags" },
@@ -279,7 +277,7 @@ export default {
       this.loading = true;
       axios
         .get(
-          "http://localhost:3000/api/customer/list?limit=10&offset=1&orderby=id&order=desc&status=Active",
+          "http://localhost:3000/api/customer/list?limit=20&offset=1&orderby=id&order=desc&status=Active",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`, // Get the token from localStorage
@@ -307,6 +305,8 @@ export default {
             id: customer.id, // Ensure 'id' is included for row identification
           }));
           this.filteredCustomers = this.customers;
+          console.log(this.filteredCustomers);
+
           this.isSearchResult = false; // Data from getAllCustomers, no chit column
         })
         .catch((error) => {

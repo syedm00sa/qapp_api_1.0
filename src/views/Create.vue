@@ -155,9 +155,9 @@ export default {
             "Unable to create customer. Please try again.",
             "error"
           );
-          alert(
-            "An error occurred while creating the customer. Please try again."
-          );
+          // alert(
+          //   "An error occurred while creating the customer. Please try again."
+          // );
         }
       }
     },

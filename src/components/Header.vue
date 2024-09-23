@@ -10,16 +10,51 @@
       <v-btn icon :to="{ path: '/landing' }">
         <v-icon>mdi-home</v-icon>
       </v-btn>
+      <v-menu min-width="200px" rounded>
+        <template v-slot:activator="{ props }">
+          <v-btn icon v-bind="props">
+            <v-avatar color="grey" size="small">
+              <span class="text-h5">{{ user.initials }}</span>
+            </v-avatar>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-text>
+            <div class="mx-auto text-center">
+              <v-avatar color="red">
+                <span class="text-h5">{{ user.initials }}</span>
+              </v-avatar>
+              <h3>{{ user.fullName }}</h3>
+              <p class="text-caption mt-1">
+                {{ user.email }}
+              </p>
+              <v-card width="200">
+                <v-card-title>{{ username }}</v-card-title>
+                <v-card-actions>
+                  <v-btn icon @click="logout">
+                    <v-icon color="red">mdi-logout</v-icon>
+                  </v-btn>
+                  <v-btn text @click="logout">Logout</v-btn>
+                </v-card-actions>
+              </v-card>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-menu>
     </v-app-bar>
-    <v-main>
-      <h1>Main Hearder</h1>
-    </v-main>
   </v-app>
 </template>
 
 <script>
 export default {
   name: "Header",
+  data: () => ({
+    user: {
+      initials: "",
+      fullName: "Selva",
+      email: "sk@gamil.com",
+    },
+  }),
 };
 </script>
 
