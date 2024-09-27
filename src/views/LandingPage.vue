@@ -8,8 +8,8 @@
       <v-menu min-width="200px" rounded>
         <template v-slot:activator="{ props }">
           <v-btn icon v-bind="props">
-            <v-avatar color="grey" size="large">
-              <span class="text-h5">{{ user.initials }}</span>
+            <v-avatar color="red">
+              <v-icon class="white--text">mdi-account</v-icon>
             </v-avatar>
           </v-btn>
         </template>
@@ -95,7 +95,7 @@ export default {
     logout() {
       // Handle logout logic here
       console.log("User logged out");
-      this.$router.push("/login");
+      this.$router.push("/");
     },
     navigateToSearch() {
       this.$router.push("/search");

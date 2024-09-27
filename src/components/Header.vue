@@ -13,8 +13,8 @@
       <v-menu min-width="200px" rounded>
         <template v-slot:activator="{ props }">
           <v-btn icon v-bind="props">
-            <v-avatar color="grey" size="small">
-              <span class="text-h5">{{ user.initials }}</span>
+            <v-avatar color="red">
+              <v-icon class="white--text">mdi-account</v-icon>
             </v-avatar>
           </v-btn>
         </template>
@@ -55,6 +55,13 @@ export default {
       email: "sk@gamil.com",
     },
   }),
+  methods: {
+    logout() {
+      console.log("Logout");
+
+      this.$router.push("/");
+    },
+  },
 };
 </script>
 
