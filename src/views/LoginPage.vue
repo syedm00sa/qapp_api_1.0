@@ -71,7 +71,9 @@ export default {
           if (response.data && response.data.status_code === 200) {
             console.log("User Login Successfully");
 
-            // Handle success - store token and navigate
+            console.log("res", response.data.data.user.user_name);
+            const userName = response.data.data.user.user_name;
+            localStorage.setItem("userName", userName);
             const token = response.data.data.token;
             localStorage.setItem("token", token); // Save token to localStorage
             this.$router.push("/landing"); // Navigate to landing page

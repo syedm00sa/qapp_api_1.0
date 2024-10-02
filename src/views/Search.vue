@@ -35,17 +35,19 @@
                 <div v-if="editedCustomer && editedCustomer.id === item.id">
                   <!-- Editable mode -->
                   <v-btn color="success" small @click="saveCustomer(item)"
-                    >save</v-btn
+                    ><v-icon left>mdi-content-save</v-icon></v-btn
                   >
-                  <v-btn color="grey" small @click="cancelEdit">Cancel</v-btn>
+                  <v-btn color="grey" small @click="cancelEdit"
+                    ><v-icon left>mdi-close-circle</v-icon></v-btn
+                  >
                 </div>
                 <div v-else>
                   <!-- Default mode -->
                   <v-btn color="primary" small @click="startEditing(item)"
-                    >Edit</v-btn
+                    ><v-icon left>mdi-pencil</v-icon></v-btn
                   >
                   <v-btn color="red" small @click="deleteCustomer(item)"
-                    >Delete</v-btn
+                    ><v-icon left>mdi-delete</v-icon></v-btn
                   >
                 </div>
               </div>

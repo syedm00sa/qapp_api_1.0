@@ -22,7 +22,7 @@
           <v-card-text>
             <div class="mx-auto text-center">
               <v-avatar color="red">
-                <span class="text-h5">{{ user.initials }}</span>
+                <v-icon class="white--text">mdi-account</v-icon>
               </v-avatar>
               <h3>{{ user.fullName }}</h3>
               <p class="text-caption mt-1">
@@ -51,8 +51,8 @@ export default {
   data: () => ({
     user: {
       initials: "",
-      fullName: "Selva",
-      email: "sk@gamil.com",
+      fullName: localStorage.getItem("userName"),
+      email: "",
     },
   }),
   methods: {
