@@ -196,7 +196,7 @@
               <v-chip
                 v-for="(tag, index) in item.tags"
                 :key="index"
-                color="yellow"
+                color="blue"
                 class="mr-2 mb-2"
                 small
               >
@@ -412,7 +412,7 @@ export default {
           }); // Update filteredCustomers with search results
           this.isSearchResult = true; // Data from search, chit column should be shown
         } else {
-          console.error("Unexpected status code:", response.status);
+          console.error("Unexpected status code:", response);
         }
       } catch (error) {
         console.error(

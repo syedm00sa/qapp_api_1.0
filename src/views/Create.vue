@@ -23,13 +23,23 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="3">
+            <!-- <v-col cols="12" md="3">
+              <v-radio-group
+                v-model="customer.verified"
+                row
+                :rules="[rules.required]"
+              >
+                <v-radio label="Yes" value="Yes"></v-radio>
+                <v-radio label="No" value="No"></v-radio>
+              </v-radio-group>
+            </v-col> -->
+            <!-- <v-col cols="12" md="3">
               <v-text-field
                 v-model="customer.verified"
                 label="Verified"
                 :rules="[rules.required]"
               ></v-text-field>
-            </v-col>
+            </v-col> -->
             <v-col cols="12" md="3">
               <v-text-field
                 v-model="customer.address"
@@ -82,6 +92,23 @@
             <v-col cols="12" md="3">
               <v-text-field v-model="customer.pid" label="PID"></v-text-field>
             </v-col>
+            <v-col cols="12" md="3">
+              <div class="verified-header">Verified</div>
+              <v-radio-group
+                v-model="customer.verified"
+                class="verified-radio-group"
+                :rules="[rules.required]"
+              >
+                <v-row>
+                  <v-col cols="6" class="text-left">
+                    <v-radio label="Yes" value="Yes"></v-radio>
+                  </v-col>
+                  <v-col cols="6" class="text-right">
+                    <v-radio label="No" value="No"></v-radio>
+                  </v-col>
+                </v-row>
+              </v-radio-group>
+            </v-col>
           </v-row>
         </v-form>
       </v-card-text>
@@ -108,7 +135,7 @@ export default {
       customer: {
         name: "",
         mobile_number: "",
-        verified: "",
+        verified: "No",
         area: "",
         city: "",
         pincode: "",
@@ -183,6 +210,13 @@ export default {
 </script>
 
 <style scoped>
+.verified-header {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.verified-radio-group {
+  margin-top: 8px;
+}
 /* .v-card {
   padding: 2em;
 } */
