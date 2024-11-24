@@ -153,14 +153,13 @@
 
           <template v-slot:item.verified="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field
-                v-model="editedCustomer.verified"
-                dense
-                hide-details
-              />
+              <v-radio-group v-model="editedCustomer.verified" row dense>
+                <v-radio label="Yes" value="yes"></v-radio>
+                <v-radio label="No" value="no"></v-radio>
+              </v-radio-group>
             </div>
             <div v-else>
-              {{ item.verified }}
+              {{ item.verified === "yes" ? "Yes" : "No" }}
             </div>
           </template>
           <template v-slot:item.chit="{ item }">
@@ -263,6 +262,9 @@ export default {
     },
   },
   methods: {
+    enterEditMode(item) {
+      this.editedCustomer = { ...item }; // Copy the item to preserve its original state
+    },
     fetchCustomers() {
       this.loading = true;
       axios
@@ -318,6 +320,7 @@ export default {
         this.newTag = "";
       }
     },
+
     removeTag(index) {
       const updatedTags = [...this.theTags];
       updatedTags.splice(index, 1);
@@ -382,11 +385,6 @@ export default {
               Authorization: `Bearer ${localStorage.getItem("token")}`, // Get the token from localStorage
             },
           }
-          // {
-          //   headers: {
-          //     "Content-Type": "application/json", // Ensure the correct Content-Type
-          //   },
-          // }
         );
         console.log("searchResponse", response.data.data);
 
@@ -435,30 +433,12 @@ export default {
         console.log("payload", payload);
 
         const url = `http://localhost:3000/api/customer/edit/${id}`;
-        const response = await axios.post(
-          url,
-          payload,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`, // Get the token from localStorage
-            },
-          }
-          // {
-          //   headers: {
-          //     "Content-Type": "application/json", // Ensure the correct Content-Type
-          //   },
-          // }
-        );
+        const response = await axios.post(url, payload, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Get the token from localStorage
+          },
+        });
         console.log("res", response);
-
-        // Handle the response and update the UI
-        // if (response.status === 201) {
-        //   this.fetchCustomers();
-
-        //   this.editedCustomer = null;
-        // } else {
-        //   console.log("Unexpected status code:", response.status);
-        // }
         if (response.status === 201) {
           // Find the index of the customer being edited and update it
           console.log("Save button Clicked");
@@ -499,14 +479,14 @@ export default {
   word-break: break-word; /* Allows long words to break and wrap into multiple lines */
   overflow-wrap: break-word;
   white-space: normal; /* Makes sure text wraps normally */
-  min-width: 150px; /* Adjust width as needed for your table */
+  min-width: 100px; /* Adjust width as needed for your table */
 }
 
 .field-edit-width {
   word-break: break-word; /* Allows long words to break and wrap into multiple lines */
   overflow-wrap: break-word;
   white-space: normal; /* Makes sure text wraps normally */
-  min-width: 70px; /* Adjust width as needed for your table */
+  min-width: 75px; /* Adjust width as needed for your table */
 }
 .v-main {
   padding: 2em;
