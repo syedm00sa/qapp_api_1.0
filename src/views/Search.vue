@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <v-card class="mb-5" elevation="2">
+    <v-card class="mb-2" elevation="2">
       <v-card-title>
         <v-text-field
           v-model="searchQuery"
@@ -14,7 +14,7 @@
       </v-card-title>
     </v-card>
 
-    <v-card class="mb-5" elevation="2">
+    <v-card class="mb-5" elevation="0">
       <v-card-title class="pb-0">
         <h2>Manage Customers</h2>
       </v-card-title>
@@ -92,7 +92,7 @@
                 hide-details
               />
             </div>
-            <div v-else>
+            <div v-else class="nameaddress-text">
               {{ item.mobile_number }}
             </div>
           </template>
@@ -105,7 +105,7 @@
                 hide-details
               />
             </div>
-            <div v-else class="nameaddress-text">
+            <div v-else :class="['nameaddress-text']">
               {{ item.address }}
             </div>
           </template>
@@ -114,29 +114,17 @@
               <!-- Editable text field for mobile1 -->
               <v-text-field v-model="editedCustomer.area" dense hide-details />
             </div>
-            <div v-else>
+            <div v-else class="field-edit-width">
               {{ item.area }}
             </div>
           </template>
-          <!-- <template v-slot:item.status="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field
-                v-model="editedCustomer.status"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else>
-              {{ item.status }}
-            </div>
-          </template> -->
 
           <template v-slot:item.city="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
               <!-- Editable text field for mobile1 -->
               <v-text-field v-model="editedCustomer.city" dense hide-details />
             </div>
-            <div v-else>
+            <div v-else class="field-edit-width">
               {{ item.city }}
             </div>
           </template>
@@ -158,7 +146,7 @@
             <div v-if="editedCustomer && editedCustomer.id === item.id">
               <v-text-field v-model="editedCustomer.pid" dense hide-details />
             </div>
-            <div v-else>
+            <div v-else class="field-edit-width">
               {{ item.pid }}
             </div>
           </template>
@@ -179,7 +167,7 @@
             <div v-if="editedCustomer && editedCustomer.id === item.id">
               <v-text-field v-model="editedCustomer.chit" dense hide-details />
             </div>
-            <div v-else>
+            <div v-else class="field-edit-width">
               {{ item.chit }}
             </div>
           </template>
@@ -212,7 +200,7 @@
                 hide-details
               />
             </div>
-            <div v-else>
+            <div v-else class="field-edit-width">
               {{ item.comments }}
             </div>
           </template>
@@ -509,8 +497,16 @@ export default {
 <style scoped>
 .nameaddress-text {
   word-break: break-word; /* Allows long words to break and wrap into multiple lines */
+  overflow-wrap: break-word;
   white-space: normal; /* Makes sure text wraps normally */
-  min-width: 130px; /* Adjust width as needed for your table */
+  min-width: 150px; /* Adjust width as needed for your table */
+}
+
+.field-edit-width {
+  word-break: break-word; /* Allows long words to break and wrap into multiple lines */
+  overflow-wrap: break-word;
+  white-space: normal; /* Makes sure text wraps normally */
+  min-width: 70px; /* Adjust width as needed for your table */
 }
 .v-main {
   padding: 2em;

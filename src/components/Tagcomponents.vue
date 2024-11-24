@@ -4,7 +4,7 @@
     <v-chip
       v-for="(tag, index) in theTags"
       :key="index"
-      color="yellow"
+      color="blue"
       class="mr-2 mb-2"
       small
     >
