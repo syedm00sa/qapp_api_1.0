@@ -24,7 +24,7 @@
           :headers="filteredHeaders"
           :items="filteredCustomers"
           :items-length="totalItems"
-          class="elevation-1"
+          class="elevation-1 custom-table"
           dense
         >
           <template v-slot:item.tags="{ item }">
@@ -47,12 +47,14 @@
             </div>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-btn color="primary" small @click="openEditDialog(item)">
-              <v-icon left>mdi-pencil</v-icon>
-            </v-btn>
-            <v-btn color="red" small @click="deleteCustomer(item)">
-              <v-icon left>mdi-delete</v-icon>
-            </v-btn>
+            <div class="button">
+              <v-btn color="primary" small @click="openEditDialog(item)">
+                <v-icon left>mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn color="red" small @click="deleteCustomer(item)">
+                <v-icon left>mdi-delete</v-icon>
+              </v-btn>
+            </div>
           </template>
         </v-data-table>
       </div>
@@ -436,43 +438,57 @@ export default {
 </script>
 
 <style scoped>
-.nameaddress-text {
-  word-break: break-word; /* Allows long words to break and wrap into multiple lines */
-  overflow-wrap: break-word;
-  white-space: normal; /* Makes sure text wraps normally */
-  min-width: 100px; /* Adjust width as needed for your table */
+/* Wrapping text inside table cells */
+.v-data-table td,
+.v-data-table th {
+  white-space: normal; /* Allows text to wrap */
+  word-wrap: break-word; /* Ensures long words wrap */
+  overflow-wrap: break-word; /* Modern browser support */
 }
 
-.field-edit-width {
-  word-break: break-word; /* Allows long words to break and wrap into multiple lines */
-  overflow-wrap: break-word;
-  white-space: normal; /* Makes sure text wraps normally */
-  min-width: 75px; /* Adjust width as needed for your table */
-}
+/* Main container styling */
 .v-main {
   padding: 2em;
 }
+
+/* Adjusting card title layout */
 .v-card-title .v-col {
-  max-width: 600px;
+  max-width: 400px;
   width: 100%;
 }
+
+/* Card spacing */
 .v-card {
   margin-bottom: 20px;
 }
+
+/* Table wrapper for horizontal scrolling */
 .table-wrapper {
   overflow-x: auto;
 }
+
+/* Remove conflicting nowrap style */
 .v-data-table {
-  white-space: nowrap;
+  white-space: normal !important; /* Ensures wrapping takes effect */
 }
+
+/* Wrapper adjustments */
 .v-data-table__wrapper {
   overflow-x: auto !important;
 }
+
+/* Card title styles */
 .v-card-title h2 {
   margin: 0;
   font-weight: bold;
 }
+
+/* Button styles */
+.button {
+  display: flex;
+}
 .v-btn {
   margin-right: 8px;
+  min-width: 50px;
 }
 </style>
