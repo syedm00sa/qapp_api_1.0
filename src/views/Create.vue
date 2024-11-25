@@ -23,23 +23,6 @@
                 required
               ></v-text-field>
             </v-col>
-            <!-- <v-col cols="12" md="3">
-              <v-radio-group
-                v-model="customer.verified"
-                row
-                :rules="[rules.required]"
-              >
-                <v-radio label="Yes" value="Yes"></v-radio>
-                <v-radio label="No" value="No"></v-radio>
-              </v-radio-group>
-            </v-col> -->
-            <!-- <v-col cols="12" md="3">
-              <v-text-field
-                v-model="customer.verified"
-                label="Verified"
-                :rules="[rules.required]"
-              ></v-text-field>
-            </v-col> -->
             <v-col cols="12" md="3">
               <v-text-field
                 v-model="customer.address"

@@ -13,7 +13,6 @@
         ></v-text-field>
       </v-card-title>
     </v-card>
-
     <v-card class="mb-5" elevation="0">
       <v-card-title class="pb-0">
         <h2>Manage Customers</h2>
@@ -28,153 +27,9 @@
           class="elevation-1"
           dense
         >
-          <template v-slot:item.actions="{ item }">
-            <div v-if="item.source">
-              <div v-if="item.source && item.source === 'new'">
-                <!-- Show buttons only if chit is not 'yes' -->
-                <div v-if="editedCustomer && editedCustomer.id === item.id">
-                  <!-- Editable mode -->
-                  <v-btn color="success" small @click="saveCustomer(item)"
-                    ><v-icon left>mdi-content-save</v-icon></v-btn
-                  >
-                  <v-btn color="grey" small @click="cancelEdit"
-                    ><v-icon left>mdi-close-circle</v-icon></v-btn
-                  >
-                </div>
-                <div v-else>
-                  <!-- Default mode -->
-                  <v-btn color="primary" small @click="startEditing(item)"
-                    ><v-icon left>mdi-pencil</v-icon></v-btn
-                  >
-                  <v-btn color="red" small @click="deleteCustomer(item)"
-                    ><v-icon left>mdi-delete</v-icon></v-btn
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div v-else>
-              <div v-if="editedCustomer && editedCustomer.id === item.id">
-                <v-btn color="success" small @click="saveCustomer(item)">
-                  <v-icon left>mdi-content-save</v-icon>
-                </v-btn>
-                <v-btn color="grey" small @click="cancelEdit">
-                  <v-icon left>mdi-close-circle</v-icon>
-                </v-btn>
-              </div>
-              <div v-else>
-                <v-btn color="primary" small @click="startEditing(item)">
-                  <v-icon left>mdi-pencil</v-icon>
-                </v-btn>
-                <v-btn color="red" small @click="deleteCustomer(item)">
-                  <v-icon left>mdi-delete</v-icon>
-                </v-btn>
-              </div>
-            </div>
-          </template>
-
-          <template v-slot:item.name="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for Name -->
-              <v-text-field v-model="editedCustomer.name" dense hide-details />
-            </div>
-            <div v-else class="nameaddress-text">
-              {{ item.name }}
-            </div>
-          </template>
-
-          <template v-slot:item.mobile_number="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
-              <v-text-field
-                v-model="editedCustomer.mobile_number"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else class="nameaddress-text">
-              {{ item.mobile_number }}
-            </div>
-          </template>
-          <template v-slot:item.address="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
-              <v-text-field
-                v-model="editedCustomer.address"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else :class="['nameaddress-text']">
-              {{ item.address }}
-            </div>
-          </template>
-          <template v-slot:item.area="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
-              <v-text-field v-model="editedCustomer.area" dense hide-details />
-            </div>
-            <div v-else class="field-edit-width">
-              {{ item.area }}
-            </div>
-          </template>
-
-          <template v-slot:item.city="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <!-- Editable text field for mobile1 -->
-              <v-text-field v-model="editedCustomer.city" dense hide-details />
-            </div>
-            <div v-else class="field-edit-width">
-              {{ item.city }}
-            </div>
-          </template>
-
-          <template v-slot:item.pincode="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field
-                v-model="editedCustomer.pincode"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else>
-              {{ item.pincode }}
-            </div>
-          </template>
-
-          <template v-slot:item.pid="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field v-model="editedCustomer.pid" dense hide-details />
-            </div>
-            <div v-else class="field-edit-width">
-              {{ item.pid }}
-            </div>
-          </template>
-
-          <template v-slot:item.verified="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-radio-group v-model="editedCustomer.verified" row dense>
-                <v-radio label="Yes" value="yes"></v-radio>
-                <v-radio label="No" value="no"></v-radio>
-              </v-radio-group>
-            </div>
-            <div v-else>
-              {{ item.verified === "yes" ? "Yes" : "No" }}
-            </div>
-          </template>
-          <template v-slot:item.chit="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field v-model="editedCustomer.chit" dense hide-details />
-            </div>
-            <div v-else class="field-edit-width">
-              {{ item.chit }}
-            </div>
-          </template>
-
-          <!-- Display Tags Normally or Edit Mode -->
           <template v-slot:item.tags="{ item }">
             <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <TagComponent
+              <UiTagShow
                 :theTags="editedCustomer.tags"
                 @tagSelectionChanged="handleTagSelectionChanged"
               />
@@ -191,31 +46,82 @@
               </v-chip>
             </div>
           </template>
-          <template v-slot:item.comments="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <v-text-field
-                v-model="editedCustomer.comments"
-                dense
-                hide-details
-              />
-            </div>
-            <div v-else class="field-edit-width">
-              {{ item.comments }}
-            </div>
+          <template v-slot:item.actions="{ item }">
+            <v-btn color="primary" small @click="openEditDialog(item)">
+              <v-icon left>mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn color="red" small @click="deleteCustomer(item)">
+              <v-icon left>mdi-delete</v-icon>
+            </v-btn>
           </template>
         </v-data-table>
       </div>
     </v-card>
+    <!-- Edit Dialog -->
+    <v-dialog v-model="editDialog" max-width="600px">
+      <v-card v-if="editedCustomer">
+        <v-card-title>
+          <span class="text-h6">Edit Customer</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row dense>
+              <!-- Editable fields -->
+              <v-col
+                cols="12"
+                sm="6"
+                v-for="(field, key) in editableFields"
+                :key="key"
+              >
+                <v-text-field
+                  v-model="editedCustomer[field.key]"
+                  :label="field.label"
+                  dense
+                ></v-text-field>
+              </v-col>
+
+              <!-- TagComponent -->
+              <v-col cols="12">
+                <TagComponent
+                  :theTags="editedCustomer.tags"
+                  @tagSelectionChanged="handleTagSelectionChanged"
+                />
+              </v-col>
+              <!-- Verified checkbox -->
+              <v-col cols="12">
+                <v-radio-group v-model="editedCustomer.verified" row dense>
+                  <v-radio label="Yes" value="Yes"></v-radio>
+                  <v-radio label="No" value="No"></v-radio>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="saveCustomer">Save</v-btn>
+          <v-btn color="red darken-1" text @click="cancelEdit">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-main>
 </template>
 
 <script>
 import TagComponent from "../components/Tagcomponents.vue";
+import UiTagShow from "../components/UiTagShow.vue";
 import axios from "axios";
 
 export default {
+  props: {
+    theTags: {
+      type: Array,
+      default: () => [],
+    },
+  },
   components: {
     TagComponent,
+    UiTagShow,
   },
   data() {
     return {
@@ -227,19 +133,43 @@ export default {
       editedCustomer: null,
       loading: false,
 
+      editDialog: false, // Controls the visibility of the dialog
+      editedCustomer: {
+        name: "",
+        mobile_number: "",
+        address: "",
+        area: "",
+        city: "",
+        pincode: "",
+        pid: "",
+        comments: "",
+        verified: "",
+        tags: [],
+      },
+      editableFields: [
+        { key: "name", label: "Name" },
+        { key: "mobile_number", label: "Mobile Number" },
+        { key: "address", label: "Address" },
+        { key: "area", label: "Area" },
+        { key: "city", label: "City" },
+        { key: "pincode", label: "Pin Code" },
+        { key: "pid", label: "PID" },
+        { key: "comments", label: "Comments" },
+      ],
+
       // Custom Headers with Display Names
       headers: [
-        { title: "Name", key: "name", visibility: "", show: "false" },
+        { title: "Name", key: "name" },
         { title: "Mobile", key: "mobile_number" },
         { title: "Address", key: "address" },
         { title: "Area", key: "area" },
         { title: "City", key: "city" },
         { title: "Pin Code", key: "pincode" },
-        { title: "Tag", key: "tags" },
         { title: "Comments", key: "comments" },
         { title: "PID", key: "pid" },
         { title: "Verified", key: "verified" },
         { title: "Chit", key: "chit" },
+        { title: "Tag", key: "tags" },
         { title: "Actions", key: "actions" },
       ],
     };
@@ -261,6 +191,43 @@ export default {
       });
     },
   },
+  startEditing(customer) {
+    this.editedCustomer = customer
+      ? { ...customer, tags: customer.tags || [] } // Clone and ensure `tags` is an array
+      : {
+          name: "",
+          mobile_number: "",
+          address: "",
+          area: "",
+          city: "",
+          pincode: "",
+          pid: "",
+          comments: "",
+          verified: "",
+          tags: [],
+        };
+    this.editDialog = true; // Open the dialog
+  },
+
+  watch: {
+    editDialog(newValue) {
+      if (newValue && !this.editedCustomer) {
+        this.editedCustomer = {
+          name: "",
+          mobile_number: "",
+          address: "",
+          area: "",
+          city: "",
+          pincode: "",
+          pid: "",
+          comments: "",
+          verified: "",
+          tags: [],
+        };
+      }
+    },
+  },
+
   methods: {
     enterEditMode(item) {
       this.editedCustomer = { ...item }; // Copy the item to preserve its original state
@@ -297,7 +264,7 @@ export default {
             id: customer.id, // Ensure 'id' is included for row identification
           }));
           this.filteredCustomers = this.customers;
-          console.log(this.filteredCustomers);
+          console.log("filteredCustomers", this.filteredCustomers);
 
           this.isSearchResult = false; // Data from getAllCustomers, no chit column
         })
@@ -313,6 +280,7 @@ export default {
         this.editedCustomer.tags = newTags; // Update tags on edit mode
       }
     },
+
     addTag() {
       const trimmedTag = this.newTag.trim();
       if (trimmedTag && !this.theTags.includes(trimmedTag)) {
@@ -326,6 +294,7 @@ export default {
       updatedTags.splice(index, 1);
       this.$emit("tagSelectionChanged", updatedTags);
     },
+
     async deleteCustomer(item) {
       const Customer = JSON.parse(JSON.stringify(item));
       console.log("Customer", Customer);
@@ -407,68 +376,60 @@ export default {
         );
       }
     },
-
+    openEditDialog(item) {
+      this.editedCustomer = { ...item }; // Clone the selected customer for editing
+      this.editDialog = true; // Open the dialog
+    },
     startEditing(item) {
       this.editedCustomer = JSON.parse(JSON.stringify(item)); // Clone the selected row data for editing
     },
     async saveCustomer() {
       if (!this.editedCustomer) return; // Ensure there's an edited customer
-
+      // Save logic
       try {
         const { id } = this.editedCustomer; // Get the ID of the customer to be updated
+        const url = `http://localhost:3000/api/customer/edit/${id}`;
 
         const payload = {
           name: this.editedCustomer.name,
+          mobile_number: this.editedCustomer.mobile_number,
           address: this.editedCustomer.address,
           area: this.editedCustomer.area,
           city: this.editedCustomer.city,
-          mobile_number: this.editedCustomer.mobile_number,
+
           pincode: this.editedCustomer.pincode,
-          status: this.editedCustomer.status,
-          tags: this.editedCustomer.tags,
+          tags: [...this.editedCustomer.tags],
           comments: this.editedCustomer.comments,
           pid: this.editedCustomer.pid,
           verified: this.editedCustomer.verified,
         };
         console.log("payload", payload);
 
-        const url = `http://localhost:3000/api/customer/edit/${id}`;
         const response = await axios.post(url, payload, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Get the token from localStorage
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         console.log("res", response);
-        if (response.status === 201) {
-          // Find the index of the customer being edited and update it
-          console.log("Save button Clicked");
-          const query = this.searchQuery.trim();
 
+        if (response.status === 201) {
+          // Update local data
           const index = this.customers.findIndex(
-            (customer) => customer.id === id
+            (customer) => customer.id === this.editedCustomer.id
           );
           if (index !== -1) {
-            this.customers.splice(index, 1, this.editedCustomer);
+            this.customers[index] = { ...this.editedCustomer };
+            this.filteredCustomers = [...this.customers];
           }
-          if (!query) {
-            this.filteredCustomers = this.fetchCustomers(); // Show all customers if query is empty
-            this.editedCustomer = null;
-
-            return;
-          } else {
-            this.filteredCustomers = this.handleSearch();
-            this.editedCustomer = null;
-          }
-
-          this.filteredCustomers = this.customers; // Refresh filtered data
-          this.editedCustomer = null; // Reset the editing state
+          this.editDialog = false; // Close the dialog
         }
       } catch (error) {
-        console.error("Error updating customer:", error);
+        console.error("Error saving customer:", error);
       }
     },
     cancelEdit() {
-      this.editedCustomer = null; // Reset the edit state
+      this.editedCustomer = null; // Reset edited customer
+      this.editDialog = false; // Close the dialog
     },
   },
 };
