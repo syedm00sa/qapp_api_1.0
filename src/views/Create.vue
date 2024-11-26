@@ -7,75 +7,101 @@
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <v-row>
-            <v-col cols="6" md="3">
+            <v-col cols="12" md="6" lg="4">
               <v-text-field
                 v-model="customer.name"
                 label="Name"
                 :rules="[rules.required]"
                 required
+                class="text-field"
+                type="text"
+                auto-grow
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="6" lg="4">
               <v-text-field
                 v-model="customer.mobile_number"
                 label="Mobile Number"
                 :rules="[rules.required, rules.number]"
                 required
+                class="text-field"
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="6" lg="4">
               <v-text-field
                 v-model="customer.address"
                 label="Address"
                 :rules="[rules.required]"
                 required
+                class="text-field"
+                type="text"
+                auto-grow
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="6" lg="4">
               <v-text-field
                 v-model="customer.area"
                 label="Area"
                 :rules="[rules.required]"
                 required
+                class="text-field"
+                type="text"
+                auto-grow
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="6" lg="4">
               <v-text-field
                 v-model="customer.city"
                 label="City"
                 :rules="[rules.required]"
                 required
+                class="text-field"
+                type="text"
+                auto-grow
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="6" lg="4">
               <v-text-field
                 v-model="customer.pincode"
                 label="Pincode"
                 :rules="[rules.required, rules.number]"
                 required
+                class="text-field"
+                type="text"
+                auto-grow
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="6" lg="4">
               <v-combobox
                 v-model="customer.tags"
                 label="Tags"
                 multiple
                 chips
                 clearable
+                class="text-field"
               ></v-combobox>
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="6" lg="4">
               <v-text-field
                 v-model="customer.comments"
                 label="Comments"
                 :rules="[rules.required]"
                 required
+                class="text-field"
+                type="text"
+                auto-grow
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="3">
-              <v-text-field v-model="customer.pid" label="PID"></v-text-field>
+            <v-col cols="12" md="6" lg="4">
+              <v-text-field
+                v-model="customer.pid"
+                label="PID"
+                class="text-field"
+                type="text"
+                auto-grow
+              ></v-text-field>
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="6" lg="4">
               <div class="verified-header">Verified</div>
               <v-radio-group
                 v-model="customer.verified"
@@ -101,6 +127,7 @@
         <v-btn color="primary" @click="createCustomer">Create</v-btn>
       </v-card-actions>
     </v-card>
+
     <!-- Snackbar for Toast Notifications -->
     <v-snackbar v-model="snackbar.show" :color="snackbar.color" top>
       {{ snackbar.message }}
@@ -127,7 +154,6 @@ export default {
         comments: "",
         pid: "",
       },
-      // tagOptions: ["black", "blue", "green", "violet", "purple"], // Predefined tag options
       rules: {
         required: (value) => !!value || "Required.",
         number: (value) => !isNaN(value) || "Must be a number.",
@@ -163,8 +189,6 @@ export default {
             this.showSnackbar("Customer created successfully", "success");
           }
 
-          // Show success message
-
           // Handle the response
           console.log("Customer created successfully:", response.data);
 
@@ -172,14 +196,10 @@ export default {
           this.clearForm();
         } catch (error) {
           console.error("Error creating customer:", error);
-          // Show error message
           this.showSnackbar(
             "Unable to create customer. Please try again.",
             "error"
           );
-          // alert(
-          //   "An error occurred while creating the customer. Please try again."
-          // );
         }
       }
     },
@@ -193,14 +213,31 @@ export default {
 </script>
 
 <style scoped>
+/* Allow vertical resize on text fields */
+.text-field {
+  word-wrap: break-word; /* Break long words */
+  overflow-wrap: break-word; /* Break words at boundaries */
+  white-space: normal; /* Ensure normal text wrapping */
+  resize: vertical; /* Allow resizing the text field vertically */
+}
+
+/* Make input fields resize on large text input */
+.v-text-field input,
+.v-combobox input {
+  overflow-wrap: break-word; /* Break long words */
+  word-wrap: break-word; /* Prevent horizontal scroll */
+}
+
 .verified-header {
   font-weight: bold;
   margin-bottom: 8px;
 }
+
 .verified-radio-group {
   margin-top: 8px;
 }
-/* .v-card {
-  padding: 2em;
-} */
+
+.v-card {
+  padding: 1em;
+}
 </style>
