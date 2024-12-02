@@ -47,7 +47,7 @@
             </div>
           </template>
           <template v-slot:item.actions="{ item }">
-            <div class="button">
+            <div class="button" v-if="item.chit !== 'Yes'"> 
               <v-btn color="primary" small @click="openEditDialog(item)">
                 <v-icon left>mdi-pencil</v-icon>
               </v-btn>
