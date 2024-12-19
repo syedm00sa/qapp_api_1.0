@@ -28,22 +28,24 @@
           dense
         >
           <template v-slot:item.tags="{ item }">
-            <div v-if="editedCustomer && editedCustomer.id === item.id">
-              <UiTagShow
-                :theTags="editedCustomer.tags"
-                @tagSelectionChanged="handleTagSelectionChanged"
-              />
-            </div>
-            <div v-else class="nameaddress-text">
-              <v-chip
-                v-for="(tag, index) in item.tags"
-                :key="index"
-                color="blue"
-                class="mr-2 mb-2"
-                small
-              >
-                {{ tag }}
-              </v-chip>
+            <div v-if="item.tags && item.tags.length > 0 && item.tags.some(tag => tag.trim() !== '')">
+              <div v-if="editedCustomer && editedCustomer.id === item.id">
+                <UiTagShow
+                  :theTags="item.tags  || []"
+                  @tagSelectionChanged="handleTagSelectionChanged"
+                />
+              </div>
+              <div v-else class="nameaddress-text">
+                <v-chip
+                  v-for="(tag, index) in item.tags"
+                  :key="index"
+                  color="blue"
+                  class="mr-2 mb-2"
+                  small
+                >
+                  {{ tag }}
+                </v-chip>
+              </div>
             </div>
           </template>
           <template v-slot:item.actions="{ item }">
@@ -259,7 +261,7 @@ export default {
             updated_by: customer.updated_by,
             city: customer.city,
             pincode: customer.pincode,
-            tags: customer.tags,
+            tags: customer.tags || [],
             comments: customer.comments,
             pid: customer.pid,
             verified: customer.verified,
