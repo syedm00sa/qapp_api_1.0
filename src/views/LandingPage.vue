@@ -102,13 +102,25 @@ export default {
     };
   },
 
+  created() {
+    this.checkToken(); // Check for token on component creation
+  },
+
   methods: {
+
+    checkToken() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // If token is missing, redirect to login page
+        this.$router.push("/");
+      }
+    },
+
     logout() {
       // Clear user data from localStorage and redirect to login page
-      localStorage.removeItem("userName");
-      localStorage.removeItem("userEmail");
+      localStorage.clear();
       console.log("User logged out");
-      this.$router.push("/login");
+      this.$router.push("/");
     },
 
     // Generalize navigateToSearch method to take a category as an argument

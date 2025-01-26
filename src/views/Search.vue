@@ -21,6 +21,7 @@
       <div class="table-wrapper">
         <v-data-table
           v-model:items-per-page="itemsPerPage"
+          v-model:page="currentPage"
           :headers="filteredHeaders"
           :items="filteredCustomers"
           :items-length="totalItems"
@@ -132,12 +133,14 @@ export default {
       searchQuery: "",
       isSearchResult: false,
       itemsPerPage: 10,
+      currentPage: 1,
       customers: [],
       filteredCustomers: [],
       editedCustomer: null,
       loading: false,
 
       editDialog: false, // Controls the visibility of the dialog
+      totalItems: 0,
       editedCustomer: {
         name: "",
         mobile_number: "",
@@ -214,6 +217,16 @@ export default {
   },
 
   watch: {
+    itemsPerPage(newVal, oldVal) {
+    if (newVal !== oldVal) {
+      this.fetchCustomers(); // Fetch customers with updated limit
+    }
+  },
+  currentPage(newVal, oldVal) {
+    if (newVal !== oldVal) {
+      this.fetchCustomers(); // Fetch customers with updated page
+    }
+  },
     editDialog(newValue) {
       if (newValue && !this.editedCustomer) {
         this.editedCustomer = {
@@ -238,9 +251,13 @@ export default {
     },
     fetchCustomers() {
       this.loading = true;
+      const offset = (this.currentPage - 1) * this.itemsPerPage; // Calculate offset <!-- Changes start here -->
+      const limit = this.itemsPerPage === -1 ? Number.MAX_SAFE_INTEGER : this.itemsPerPage;
+      // const limit = this.itemsPerPage === 10 ? 10 : this.itemsPerPage;
+
       axios
         .get(
-          "http://localhost:3000/api/customer/list?limit=20&offset=1&orderby=id&order=desc&status=Active",
+          `http://localhost:3000/api/customer/list?limit=${limit}&offset=${offset}&orderby=id&order=desc&status=Active`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`, // Get the token from localStorage
@@ -269,7 +286,7 @@ export default {
           }));
           this.filteredCustomers = this.customers;
           console.log("filteredCustomers", this.filteredCustomers);
-
+          this.totalItems = response.totalCount || 0; // Update totalItems for pagination <!-- Changes end here -->
           this.isSearchResult = false; // Data from getAllCustomers, no chit column
         })
         .catch((error) => {

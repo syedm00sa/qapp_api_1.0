@@ -47,6 +47,10 @@
 
 <script>
 export default {
+  created() {
+    this.checkToken(); // Check for token on component creation
+  },
+
   name: "Header",
   data: () => ({
     user: {
@@ -56,8 +60,18 @@ export default {
     },
   }),
   methods: {
+    checkToken() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // If token is missing, redirect to login page
+        this.$router.push("/");
+      }
+    },
+
     logout() {
       console.log("Logout");
+      // Clear localStorage
+      localStorage.clear();
 
       this.$router.push("/");
     },
